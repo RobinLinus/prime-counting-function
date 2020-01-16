@@ -130,6 +130,9 @@ Is it actually a variant of Meissel Lehmer Algorithm? https://en.wikipedia.org/w
         <div id="$output" class="output">&nbsp;</div>
         <button id="$countButton" hidden="">Count</button>
     </div>
+    <footer>
+        <a href="https://github.com/RobinLinus/prime-counting-function" target="_blank">Built with ❤ by Robin Linus</a>
+    </footer>
     <script type="text/javascript">
     function format(n) {
         return new Intl.NumberFormat().format(n)
@@ -227,6 +230,17 @@ Is it actually a variant of Meissel Lehmer Algorithm? https://en.wikipedia.org/w
     button[hidden] {
         display: block;
         visibility: hidden;
+    }
+        
+        
+     footer{
+        position: fixed;
+        bottom: 16px;
+    }
+
+    footer a{
+        color: #4185f4;
+        text-decoration: none;
     }
     </style>
 </body>
