@@ -6,8 +6,8 @@
     
 */
 
-const MAX_PRIME = Primes[Primes.length - 1];
-const MAX_N = MAX_PRIME * MAX_PRIME;
+const MAX_PRIME = Primes[Primes.length - 1]; // The largest prime in our database
+const MAX_N = MAX_PRIME * MAX_PRIME; // Our database enables us to count up to this number
 
 function countPrimes(n) {
     if (n < 2) return 0;
@@ -15,18 +15,16 @@ function countPrimes(n) {
     if (n===3) return 2;
     if( n > MAX_N ) throw Error('N is too big. Give me a larger database of primes!')
     
-    let i = 0;
+    let countPrimes = n;  // We assume all numbers are prime and then we subtract the composites
+    let index = 0;            
     let p = Primes[0];
 
-    let countPrimes = n;
-
-    // We iterate over all primes up to sqrt(n)
-    while (p * p <= n) {
+    while (p * p <= n) { // We iterate over all primes up to sqrt(n)
         const m = Math.floor(n / p); // FIXME: this integer division could be done faster
-        countPrimes -= countAlmostPrimesCached(m, p, i);
+        countPrimes -= countAlmostPrimesCached(m, p, index);
 
-        i++;
-        p = Primes[i];
+        index++;
+        p = Primes[index];
     }
     return countPrimes
 }
@@ -44,7 +42,7 @@ function countPrimes(n) {
 */
 
 const cache2 = {}
-function countAlmostPrimesCached(m, p, i) {
+function countAlmostPrimesCached(m, p, index) {
     // We know these results without computation:
     if (p === 2) return m; // All numbers are 2-almost-primes
     if (m === 0) return -1; // FIXME: where are these artifacts coming from??
@@ -54,12 +52,12 @@ function countAlmostPrimesCached(m, p, i) {
     if (p * p > m) { // This means, all "p-almost-primes" up to m are actually primes
         // So let's count only the primes
         
-        if (m > MAX_PRIME) return countPrimes(m) - i; // m is still too large. Let's recurse
+        if (m > MAX_PRIME) return countPrimes(m) - index; // m is still too large. Let's recurse
         
         // Yey, we can calculate countPrimes(m) "by hand"!
-        let j = i;
-        while (Primes[j] <= m) j++;
-        return j - i;
+        let countPrimes_m = index;
+        while (Primes[countPrimes_m] <= m) countPrimes_m++;
+        return countPrimes_m - index;
     }
 
 
@@ -71,19 +69,18 @@ function countAlmostPrimesCached(m, p, i) {
 }
 
 function _countAlmostPrimes(m, p) {
-    let i = 0;
+    let index = 0;
     let q = Primes[0];
 
-    let almostPrimes = m;
-    // We iterate over all primes smaller than p
-    while (q < p) {
+    let almostPrimes = m; // Assume all numbers are p-almost-prime and then substract the rest
+    while (q < p) { // We iterate over all primes smaller than p
         const m1 = Math.floor(m / q); // FIXME: this integer division could be done faster
-        almostPrimes -= countAlmostPrimesCached(m1, q, i);
+        almostPrimes -= countAlmostPrimesCached(m1, q, index);
 
-        i++;
-        q = Primes[i];
+        index++;
+        q = Primes[index];
     }
-    almostPrimes = almostPrimes - i;
+    almostPrimes = almostPrimes - index;
     return almostPrimes
 }
 
