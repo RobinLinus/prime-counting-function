@@ -21,7 +21,9 @@ const MAX_PRIME = Primes[Primes.length - 1];
 
 function countPrimes(n) {
     if (n < 2) return 0;
-
+    if (n===2) return 1;
+    if (n===3) return 2;
+    
     let i = 0;
     let p = Primes[0];
 
