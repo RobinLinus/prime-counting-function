@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Count Prime Numbers</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+</head>
+
+<body>
+    <script type="text/javascript" src="primes.js"></script>
+    <script>
+        /*
+
+    Count number of primes up to n. Fast.
+
+*/
+
+const MAX_PRIME = Primes[Primes.length - 1];
+
+
+function countPrimes(n) {
+    if (n < 2) return 0;
+
+    let i = 0;
+    let p = Primes[0];
+
+    let countPrimes = n;
+
+    while (p * p <= n) {
+        const m = Math.floor(n / p); // actually we do integer division here
+        countPrimes -= countAlmostPrimesCached(m, p, i);
+
+        i++;
+        p = Primes[i];
+    }
+    return countPrimes
+}
+
+
+
+const cache2 = {}
+
+/* a number is "p almost prime", if it has no factors smaller than p */
+
+function countAlmostPrimesCached(m, p, i) {
+    // Here are all results we already know upfront:
+    if (p === 2) return m;
+    if (m === 0) return -1;
+    if (m < p) return 0;
+    if (m === p || m - 1 === p) return 1;
+
+    // if (p * p > m) return countPrimes(m) - i; 
+    
+    if (p * p > m) { // all almost primes are actually primes
+        if (m > MAX_PRIME) return countPrimes(m) - i;
+        
+        // calculate countPrimes(m) "by hand"
+        let j = i;
+        while (Primes[j] <= m) j++;
+        return j - i;
+    }
+
+
+    // Otherwise there's actually work to do. Let's cache it
+    const cacheKey = m + '_' + p;
+    if (!cache2[cacheKey])
+        cache2[cacheKey] = _countAlmostPrimes(m, p);
+    return cache2[cacheKey];
+}
+
+function _countAlmostPrimes(m, p) {
+    let i = 0;
+    let q = Primes[0];
+
+    let almostPrimes = m;
+    while (q < p) {
+        const m1 = Math.floor(m / q); // actually we do integer division here
+        almostPrimes -= countAlmostPrimesCached(m1, q, i);
+
+        i++;
+        q = Primes[i];
+    }
+    almostPrimes = almostPrimes - i;
+    return almostPrimes
+}
+
+
+/*
+    
+    Benchmarks and Tests
+
+*/
+function benchmark(n, actualValue) {
+    if(10**n > MAX_PRIME * MAX_PRIME) throw Error('maximum exceeded. need more primes')
+    const start = Date.now();
+    const counted = countPrimes(10 ** n)
+    if (counted !== actualValue) throw Error('miscounted!!!')
+    console.log(`Primes up to 10^${n}: ${counted} time=${Date.now()-start}ms`);
+}
+
+console.log('Prime Counting Benchmark started...')
+// benchmark(2, 25)
+// benchmark(3, 168)
+// benchmark(4, 1229)
+// benchmark(5, 9592)
+// benchmark(6, 78498)
+// benchmark(7, 664579)
+benchmark(8, 5761455)
+// benchmark(9, 50847534)
+// benchmark(10, 455052511)
+// benchmark(11, 4118054813)
+
+
+/*
+Is it actually a variant of Meissel Lehmer Algorithm? https://en.wikipedia.org/wiki/Meissel%E2%80%93Lehmer_algorithm
+*/
+</script>
+    <!-- 
+
+    User Interface
+
+ -->
+    <h1>Count Prime Numbers</h1>
+    Count all prime numbers up to
+    <div class="container">
+        <input type="number" placeholder="Enter a number" id="$input" min="1" max="200000000000">
+        <div id="$output" class="output">&nbsp;</div>
+        <button id="$countButton" hidden="">Count</button>
+    </div>
+    <script type="text/javascript">
+    function format(n) {
+        return new Intl.NumberFormat().format(n)
+    }
+    $input.addEventListener('input', e => {
+
+
+        const n = Number(e.target.value);
+        if (n < 1e9) {
+            const count = countPrimes(n);
+            $output.textContent = `π(${format(n)}) = ${format(count)}`;
+            $countButton.hidden = true;
+        } else {
+            if (n > 1e11) {
+                $output.textContent = 'Value too large';
+                $countButton.hidden = true;
+                return;
+            }
+            $countButton.hidden = false;
+            $output.textContent = 'Press Count or Press Enter'
+        }
+    });
+
+
+    $input.addEventListener('keyup', e => {
+        switch (e.keyCode) {
+            case 13: 
+            case 40: 
+            case 38:
+                computeLarge();
+            default:
+                return
+        }
+        e.stopPropagation()
+    })
+
+    $countButton.addEventListener('click', computeLarge);
+
+
+    function computeLarge() {
+        $output.textContent = 'calculating...'
+        const n = Number($input.value);
+        if (n < 1e11) {
+            const count = countPrimes(n);
+            $output.textContent = `π(${format(n)}) = ${format(count)}`;
+        }
+
+    }
+    </script>
+    <style type="text/css">
+    html {
+        display: flex;
+        flex-direction: column;
+        font-family: system-ui;
+        height: 100vh;
+    }
+
+    body {
+        flex-direction: column;
+        display: flex;
+        flex-grow: 1;
+        justify-content: center;
+        align-items: center;
+        background: #efefef;
+    }
+
+    .container {
+        display: flex;
+        /*justify-content: center;*/
+        align-items: center;
+        flex-direction: column;
+    }
+
+    input {
+        padding: 12px;
+        margin: 12px;
+        background: white;
+        font-size: 16px;
+        outline: 0;
+        border: 0;
+        border-radius: 4px;
+        box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
+        width: 240px;
+        text-align: center;
+    }
+
+    .output {
+        font-size: 20px;
+        margin-top: 16px;
+        padding: 12px;
+
+    }
+
+    button[hidden] {
+        display: block;
+        visibility: hidden;
+    }
+    </style>
+</body>
+
+</html>
