@@ -9,7 +9,7 @@ The [C++ Primesieve](https://github.com/kimwalisch/primesieve) implementation cl
 In comparison, our single-threaded, unoptimized JavaScript implementation counts the primes below 10^10 in **0.5 seconds** on an Intel Core i7 (4 x 2.9 GHz).
 
 
-In the code there are benchmarks you can run on your machine. For example, the command
+You can run the benchmarks on your machine. Open the console. For example, the command 
 ```
 benchmark(10, 455052511)
 ```
