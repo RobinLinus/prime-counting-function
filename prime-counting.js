@@ -21,7 +21,7 @@ function countPrimes(n) {
 
     while (p * p <= n) { // We iterate over all primes up to sqrt(n)
         const m = Math.floor(n / p); // FIXME: this integer division could be done faster
-        countPrimes -= countAlmostPrimesCached(m, p, index);
+        countPrimes -= countAlmostPrimesCached(m, p, index); // subtract all composites which's smallest factor is p
 
         index++;
         p = Primes[index];
