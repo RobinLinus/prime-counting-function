@@ -168,7 +168,8 @@ Is it actually a variant of Meissel Lehmer Algorithm? https://en.wikipedia.org/w
 
 
     function computeLarge() {
-        $output.textContent = 'calculating...'
+        $output.textContent = 'calculating...';
+        $countButton.hidden = true;
         const n = Number($input.value);
         if (n < 1e11) {
             const count = countPrimes(n);
