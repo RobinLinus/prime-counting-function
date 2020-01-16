@@ -7,12 +7,13 @@
 */
 
 const MAX_PRIME = Primes[Primes.length - 1];
-
+const MAX_N = MAX_PRIME * MAX_PRIME;
 
 function countPrimes(n) {
     if (n < 2) return 0;
     if (n===2) return 1;
     if (n===3) return 2;
+    if( n > MAX_N ) throw Error('N is too big. Give me a larger database of primes!')
     
     let i = 0;
     let p = Primes[0];
@@ -20,7 +21,7 @@ function countPrimes(n) {
     let countPrimes = n;
 
     while (p * p <= n) {
-        const m = Math.floor(n / p); // FIXME: we're doing integer division here. Could be done faster
+        const m = Math.floor(n / p); // FIXME: this integer division could be done faster
         countPrimes -= countAlmostPrimesCached(m, p, i);
 
         i++;
@@ -67,7 +68,7 @@ function _countAlmostPrimes(m, p) {
 
     let almostPrimes = m;
     while (q < p) {
-        const m1 = Math.floor(m / q); // FIXME: we're doing integer division here. Could be done faster
+        const m1 = Math.floor(m / q); // FIXME: this integer division could be done faster
         almostPrimes -= countAlmostPrimesCached(m1, q, i);
 
         i++;
@@ -90,7 +91,6 @@ function _countAlmostPrimes(m, p) {
 
 */
 function benchmark(n, actualValue) {
-    if(10**n > MAX_PRIME * MAX_PRIME) throw Error('maximum exceeded. need more primes')
     const start = Date.now();
     const counted = countPrimes(10 ** n)
     if (counted !== actualValue) throw Error('miscounted!!!')
