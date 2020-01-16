@@ -1,7 +1,9 @@
 /*
 
-    Count number of primes up to n. Fast.
-
+    A fast prime-counting algorithm
+    
+    It counts the number of primes up to n.
+    
 */
 
 const MAX_PRIME = Primes[Primes.length - 1];
@@ -18,7 +20,7 @@ function countPrimes(n) {
     let countPrimes = n;
 
     while (p * p <= n) {
-        const m = Math.floor(n / p); // actually we do integer division here
+        const m = Math.floor(n / p); // FIXME: we're doing integer division here. Could be done faster
         countPrimes -= countAlmostPrimesCached(m, p, i);
 
         i++;
@@ -52,7 +54,7 @@ function countAlmostPrimesCached(m, p, i) {
     }
 
 
-    // Otherwise there's actually work to do. Let's cache it
+    // Otherwise, there's actually work to do. Let's cache it
     const cacheKey = m + '_' + p;
     if (!cache2[cacheKey])
         cache2[cacheKey] = _countAlmostPrimes(m, p);
@@ -65,7 +67,7 @@ function _countAlmostPrimes(m, p) {
 
     let almostPrimes = m;
     while (q < p) {
-        const m1 = Math.floor(m / q); // actually we do integer division here
+        const m1 = Math.floor(m / q); // FIXME: we're doing integer division here. Could be done faster
         almostPrimes -= countAlmostPrimesCached(m1, q, i);
 
         i++;
@@ -108,7 +110,11 @@ benchmark(8, 5761455)
 // benchmark(11, 4118054813)
 
 
+
+
 /*
-  Is our algorithm actually a variant of Meissel Lehmer Algorithm? 
+  
+  Looks like our algorithm is actually a variant of Meissel Lehmer Algorithm...  
   https://en.wikipedia.org/wiki/Meissel%E2%80%93Lehmer_algorithm
+  
 */
