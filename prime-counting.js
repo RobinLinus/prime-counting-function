@@ -20,6 +20,7 @@ function countPrimes(n) {
 
     let countPrimes = n;
 
+    // We iterate over all primes up to sqrt(n)
     while (p * p <= n) {
         const m = Math.floor(n / p); // FIXME: this integer division could be done faster
         countPrimes -= countAlmostPrimesCached(m, p, i);
@@ -32,23 +33,30 @@ function countPrimes(n) {
 
 
 
-const cache2 = {}
 
-/* a number is "p almost prime", if it has no factors smaller than p */
 
-function countAlmostPrimesCached(m, p, i) {
-    // Here are all results we already know upfront:
-    if (p === 2) return m;
-    if (m === 0) return -1;
-    if (m < p) return 0;
-    if (m === p || m - 1 === p) return 1;
-
-    // if (p * p > m) return countPrimes(m) - i; 
+/* 
     
-    if (p * p > m) { // all almost primes are actually primes
+    Counts the number of "p-almost-primes" up to m and caches the result.
+    
+    A number is "p-almost-prime", if it has no factors smaller than p 
+    
+*/
+
+const cache2 = {}
+function countAlmostPrimesCached(m, p, i) {
+    // We know these results without computation:
+    if (p === 2) return m; // All numbers are 2-almost-primes
+    if (m === 0) return -1; // FIXME: where are these artifacts coming from??
+    if (m < p) return 0; // No number has a factor bigger than itself
+    if (m === p || m - 1 === p) return 1; // There is only one number with a factor as big as itself (or one less)
+    
+    if (p * p > m) { // This means, all "p-almost-primes" up to m are actually primes
+        // So let's count only the primes
+        
         if (m > MAX_PRIME) return countPrimes(m) - i; // m is still too large. Let's recurse
         
-        // We can calculate countPrimes(m) "by hand"
+        // Yey, we can calculate countPrimes(m) "by hand"!
         let j = i;
         while (Primes[j] <= m) j++;
         return j - i;
@@ -67,6 +75,7 @@ function _countAlmostPrimes(m, p) {
     let q = Primes[0];
 
     let almostPrimes = m;
+    // We iterate over all primes smaller than p
     while (q < p) {
         const m1 = Math.floor(m / q); // FIXME: this integer division could be done faster
         almostPrimes -= countAlmostPrimesCached(m1, q, i);
