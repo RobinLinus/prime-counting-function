@@ -45,9 +45,9 @@ function countAlmostPrimesCached(m, p, i) {
     // if (p * p > m) return countPrimes(m) - i; 
     
     if (p * p > m) { // all almost primes are actually primes
-        if (m > MAX_PRIME) return countPrimes(m) - i;
+        if (m > MAX_PRIME) return countPrimes(m) - i; // m is still too large. Let's recurse
         
-        // calculate countPrimes(m) "by hand"
+        // We can calculate countPrimes(m) "by hand"
         let j = i;
         while (Primes[j] <= m) j++;
         return j - i;
