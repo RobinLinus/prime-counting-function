@@ -70,7 +70,7 @@
         $output.textContent = 'calculating...';
         $countButton.hidden = true;
         const n = Number($input.value);
-        if (n < 1e11) {
+        if (n < 1e12) {
             const count = countPrimes(n);
             $output.textContent = `π(${format(n)}) = ${format(count)}`;
         }
