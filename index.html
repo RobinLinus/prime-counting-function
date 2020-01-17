@@ -73,6 +73,8 @@
         if (n < 1e12) {
             const count = countPrimes(n);
             $output.textContent = `π(${format(n)}) = ${format(count)}`;
+        } else {
+            $output.textContent = `Value too large :(`;
         }
 
     }
