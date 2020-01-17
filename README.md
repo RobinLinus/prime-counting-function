@@ -1,8 +1,8 @@
 # Prime Counting Function
 A fast algorithm to count the number of primes up to N. Implemented in JavaScript.
 
-- [You can find the demo here](https://robinlinus.github.io/prime-counting-function/index.html)
-- [You can find the algorithm here](https://github.com/RobinLinus/prime-counting-function/blob/master/prime-counting.js)
+- [Find the demo here](https://robinlinus.github.io/prime-counting-function/index.html)
+- [Find the algorithm here](https://github.com/RobinLinus/prime-counting-function/blob/master/prime-counting.js)
 
 ## Benchmarks and Comparison 
 The [C++ Primesieve](https://github.com/kimwalisch/primesieve) implementation claims that *"It counts the primes below 10^10 in just **0.4 seconds** on an Intel Core i7-6700 CPU (4 x 3.4 GHz)."*
