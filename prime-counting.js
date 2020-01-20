@@ -56,7 +56,7 @@ function countAlmostPrimesCached(m, p, index) {
         
         // Yey, we can calculate countPrimes(m) "by hand"!
         let countPrimes_m = index;
-        while (Primes[countPrimes_m] <= m) countPrimes_m++;
+        while (Primes[countPrimes_m] <= m) countPrimes_m++;  // FIXME: Binary search here 
         return countPrimes_m - index;
     }
 
