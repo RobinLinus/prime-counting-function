@@ -13,7 +13,7 @@ function countPrimes(n) {
     if (n < 2) return 0;
     if (n===2) return 1;
     if (n===3) return 2;
-    if( n > MAX_N ) throw Error('N is too big. Give me a larger database of primes!')
+    if( n > MAX_N ) throw Error('N is too big. Bigger database of primes required!')
     
     let countPrimes = n;  // We assume all numbers are prime and then we subtract the composites
     let index = 0;            
